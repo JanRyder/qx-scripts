@@ -21,6 +21,23 @@ function interpretCheckinResponse(responseData) {
 }
 
 /**
+ * 安全的通知函数 - 使用正确的QuantumultX API
+ */
+function safeNotification(title, subtitle, body) {
+    try {
+        // QuantumultX 使用 $notify 而不是 $notification.post
+        if (typeof $notify !== 'undefined') {
+            $notify(title, subtitle, body);
+        } else {
+            // 如果通知不可用，在日志中显示更明显的信息
+            console.log("🔔 " + title + " | " + subtitle + " | " + body);
+        }
+    } catch (e) {
+        console.log("🔔 " + title + " | " + subtitle + " | " + body);
+    }
+}
+
+/**
  * 主要的响应处理函数
  */
 let body = $response.body;
@@ -40,22 +57,22 @@ if (!body) {
             case "success":
                 console.log("✅ [签到结果] 签到成功: " + result.message);
                 // 显示成功通知
-                $notification.post("🎉 签到成功", "自动签到完成", result.message);
+                safeNotification("🎉 签到成功", "自动签到完成", result.message);
                 break;
             case "no_need":
                 console.log("ℹ️ [签到结果] 无需签到: " + result.message);
                 // 显示无需签到通知
-                $notification.post("ℹ️ 无需签到", "当前状态", result.message);
+                safeNotification("ℹ️ 无需签到", "当前状态", result.message);
                 break;
             case "error":
                 console.log("❌ [签到结果] 签到失败: " + result.message);
                 // 显示失败通知
-                $notification.post("❌ 签到失败", "请检查状态", result.message);
+                safeNotification("❌ 签到失败", "请检查状态", result.message);
                 break;
             default:
                 console.log("⚠️ [签到结果] 未知状态: " + result.message);
                 // 显示未知状态通知
-                $notification.post("⚠️ 签到状态未知", "请手动检查", result.message);
+                safeNotification("⚠️ 签到状态未知", "请手动检查", result.message);
         }
         
         // 记录详细信息
@@ -69,7 +86,7 @@ if (!body) {
         console.log("[签到响应] 解析响应失败:", error.toString());
         console.log("[签到响应] 原始响应:", body.substring(0, 500));
         // 显示错误通知
-        $notification.post("⚠️ 脚本错误", "响应解析失败", "请检查日志");
+        safeNotification("⚠️ 脚本错误", "响应解析失败", "请检查日志");
         $done({ body: body });
     }
 }
