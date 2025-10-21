@@ -1,6 +1,6 @@
 /**
  * 签到响应日志脚本 - QuantumultX
- * 用于监控和记录签到结果
+ * 用于监控和记录签到结果，并显示通知
  */
 
 /**
@@ -39,15 +39,23 @@ if (!body) {
         switch (result.type) {
             case "success":
                 console.log("✅ [签到结果] 签到成功: " + result.message);
+                // 显示成功通知
+                $notification.post("🎉 签到成功", "自动签到完成", result.message);
                 break;
             case "no_need":
                 console.log("ℹ️ [签到结果] 无需签到: " + result.message);
+                // 显示无需签到通知
+                $notification.post("ℹ️ 无需签到", "当前状态", result.message);
                 break;
             case "error":
                 console.log("❌ [签到结果] 签到失败: " + result.message);
+                // 显示失败通知
+                $notification.post("❌ 签到失败", "请检查状态", result.message);
                 break;
             default:
                 console.log("⚠️ [签到结果] 未知状态: " + result.message);
+                // 显示未知状态通知
+                $notification.post("⚠️ 签到状态未知", "请手动检查", result.message);
         }
         
         // 记录详细信息
@@ -60,6 +68,8 @@ if (!body) {
     } catch (error) {
         console.log("[签到响应] 解析响应失败:", error.toString());
         console.log("[签到响应] 原始响应:", body.substring(0, 500));
+        // 显示错误通知
+        $notification.post("⚠️ 脚本错误", "响应解析失败", "请检查日志");
         $done({ body: body });
     }
 }
