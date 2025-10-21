@@ -80,6 +80,40 @@ if (!body) {
         if (requestData.isJointPain === undefined) requestData.isJointPain = 0;
         if (requestData.isRash === undefined) requestData.isRash = 0;
         
+        // 删除图片相关字段，避免上传图片要求
+        if (requestData.image !== undefined) {
+            delete requestData.image;
+            console.log("✅ [签到修改] 已删除图片字段");
+        }
+        if (requestData.images !== undefined) {
+            delete requestData.images;
+            console.log("✅ [签到修改] 已删除图片数组字段");
+        }
+        if (requestData.photo !== undefined) {
+            delete requestData.photo;
+            console.log("✅ [签到修改] 已删除照片字段");
+        }
+        if (requestData.photos !== undefined) {
+            delete requestData.photos;
+            console.log("✅ [签到修改] 已删除照片数组字段");
+        }
+        if (requestData.file !== undefined) {
+            delete requestData.file;
+            console.log("✅ [签到修改] 已删除文件字段");
+        }
+        if (requestData.files !== undefined) {
+            delete requestData.files;
+            console.log("✅ [签到修改] 已删除文件数组字段");
+        }
+        if (requestData.attachment !== undefined) {
+            delete requestData.attachment;
+            console.log("✅ [签到修改] 已删除附件字段");
+        }
+        if (requestData.attachments !== undefined) {
+            delete requestData.attachments;
+            console.log("✅ [签到修改] 已删除附件数组字段");
+        }
+        
         console.log(`[签到修改] 新坐标: ${newCoords.lon}, ${newCoords.lat}`);
         console.log("[签到修改] 修改后请求:", JSON.stringify(requestData));
         
